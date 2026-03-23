@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="BSP算法生成地牢"
+config/name="BSP算法生成地牢（github测试版）"
 run/main_scene="uid://3jcmlg3wbnse"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
