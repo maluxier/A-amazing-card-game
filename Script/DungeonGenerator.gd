@@ -202,3 +202,4 @@ func _spawn_entities():
 					if enemy:
 						enemy.position = Vector2(spawn_x, spawn_y)
 						add_child(enemy)
+						print("enemy seied")
