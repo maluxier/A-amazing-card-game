@@ -258,8 +258,9 @@ script = ExtResource("2_u7krg")
 [node name="ObstacleManager" type="Node2D" parent="."]
 unique_name_in_owner = true
 
-[node name="DungeonLogic" type="Node2D" parent="."]
+[node name="DungeonLogic" type="Node2D" parent="." node_paths=PackedStringArray("obstacle_parent")]
 script = ExtResource("3_tx0tn")
+obstacle_parent = NodePath("../ObstaticNode")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="DungeonLogic"]
 tile_set = SubResource("TileSet_epypp")

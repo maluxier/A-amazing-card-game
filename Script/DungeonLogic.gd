@@ -14,12 +14,6 @@ var split_depth = 0#BSP分割深度
 
 @onready var room_data_manager: RoomDataManager = %RoomDataManager
 
-
-@onready var obstacle_manager: ObstacleManager = %ObstacleManager
-@onready var obstacle_layer: TileMapLayer = $"../ObstaticNode/ObstacleLayer"#障碍物瓦片地图
-@export var obstacle_parent: Node2D#每一个障碍物挂载的父级对象
-var min_gap#障碍物间的最小间隔
-
 var root_node: BSPNode#起始分割块
 var leaf_node: Array[BSPNode] = []#子分割块
 var corridors: Array[Rect2i] = []#走廊占用的瓦片范围
@@ -179,73 +173,3 @@ func draw_tilemap():
 				tilemap.set_cell(Vector2i(x, y), current_source_id, current_atlas_coords)
 		
 	print("地牢生成逻辑:已绘制瓦片")
-
-
-
-
-#障碍物生成总方法
-func generate_obstacle():
-	min_gap = obstacle_manager.min_gap
-	var occupied = {}
-	
-	for node in leaf_node:
-		var rect = get_room_rect(node)
-		for i in range(800):
-			var data = obstacle_manager.get_obstacle()
-			var pos = Vector2i(randi_range(rect.position.x, rect.end.x - data.Size.x), randi_range(rect.position.y, rect.end.y - data.Size.y))
-			
-			if can_place(pos, data.Size, occupied, rect):
-				place_obstacle(pos, data, occupied)
-
-#获取房间的rect
-func get_room_rect(node: BSPNode) -> Rect2i:
-	if node.room.has_area():
-		return node.room
-	return Rect2i()
-
-#检查障碍物是否可放置
-func can_place(pos:Vector2i, size: Vector2i, occupied: Dictionary, room_rect: Rect2i) -> bool:
-	#设置表示障碍物范围的检测框
-	var cheak_rect = Rect2i(pos.x - min_gap, pos.y - min_gap, size.x + min_gap*2, size.y + min_gap*2)
-	#检测障碍物检测框是否超出房间范围
-	if not room_rect.encloses(Rect2i(pos, size)):
-		return false
-	#检测坐标是否已经被占用
-	for x in range(cheak_rect.position.x, cheak_rect.end.x):
-		for y in range(cheak_rect.position.y, cheak_rect.end.y):
-			if occupied.has(Vector2i(x, y)):
-				return false
-	
-	return true
-
-func tile_to_world_center(pos: Vector2i, size: Vector2i) -> Vector2:
-	var pos_v2 = Vector2(pos)
-	var size_v2 = Vector2(size)
-	
-	var center_offset = size_v2/2.0
-	var bottom_fix = Vector2(0, 0.5)
-	return obstacle_layer.map_to_local(pos_v2 + center_offset - bottom_fix)
-
-#实例化障碍物
-func place_obstacle(pos:Vector2i, data:ObstacleData, occupied: Dictionary):
-	if data == null:
-		print("传入的data是空的")
-		return
-	
-	for x in range(pos.x, pos.x + data.Size.x):
-		for y in range(pos.y, pos.y + data.Size.y):
-			occupied[Vector2i(x, y)] = true
-			
-			tilemap.set_cell(Vector2i(x, y), 0, Vector2i(4,4))
-	#print("正在检查data", data)
-	#print("正在检查data.scenes", data.Scene)
-	var instance = data.Scene.instantiate()
-	obstacle_parent.add_child(instance)
-	#instance.position = obstacle_layer.map_to_local(pos)
-	instance.position = tile_to_world_center(pos, data.Size)
-	instance.z_index = int(instance.position.y)
-
-func wall_set():
-	var used_cell = tilemap.get_used_cells()
-	
-	pass

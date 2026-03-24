@@ -1,9 +1,28 @@
-[gd_scene load_steps=9 format=3 uid="uid://dh74i2vi5p7q8"]
+[gd_scene load_steps=14 format=3 uid="uid://dh74i2vi5p7q8"]
 
 [ext_resource type="Script" uid="uid://bx24st46mifft" path="res://Script/TotalityManager.gd" id="1_6whob"]
 [ext_resource type="Script" uid="uid://dx4lvafgfcl7b" path="res://Script/DungeonSetManager.gd" id="2_u7krg"]
 [ext_resource type="Script" uid="uid://cwluk54iubbr1" path="res://Script/DungeonLogic.gd" id="3_tx0tn"]
+[ext_resource type="Script" uid="uid://jvbqu8uwk4ln" path="res://Script/obstacle_manager.gd" id="3_u7krg"]
 [ext_resource type="Texture2D" uid="uid://cnxqt45v08wys" path="res://Assets/spritesheet.png" id="4_wjtap"]
+[ext_resource type="Resource" uid="uid://qw3qaipncava" path="res://Prefab/stone_1x1.tres" id="5_chwn1"]
+[ext_resource type="Resource" uid="uid://dmxtjodor3jnd" path="res://Prefab/tree_2x1.tres" id="6_v7gqg"]
+[ext_resource type="Resource" uid="uid://b1hfp330e7784" path="res://Prefab/stone_2x2.tres" id="7_chwn1"]
+
+[sub_resource type="GDScript" id="GDScript_v7gqg"]
+script/source = "#障碍物信息
+#作用：储存障碍物信息，包括：名字、场景、大小、权重
+
+
+extends Resource
+
+class_name ObstacleData
+
+@export var ObstacleName: String
+@export var Scene: PackedScene
+@export var Size: Vector2i
+@export var Weight: int
+"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0e48y"]
 texture = ExtResource("4_wjtap")
@@ -257,9 +276,12 @@ script = ExtResource("2_u7krg")
 
 [node name="ObstacleManager" type="Node2D" parent="."]
 unique_name_in_owner = true
+script = ExtResource("3_u7krg")
+obstacle_configs = Array[SubResource("GDScript_v7gqg")]([ExtResource("5_chwn1"), ExtResource("6_v7gqg"), ExtResource("7_chwn1")])
 
-[node name="DungeonLogic" type="Node2D" parent="."]
+[node name="DungeonLogic" type="Node2D" parent="." node_paths=PackedStringArray("obstacle_parent")]
 script = ExtResource("3_tx0tn")
+obstacle_parent = NodePath("../ObstaticNode")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="DungeonLogic"]
 tile_set = SubResource("TileSet_epypp")

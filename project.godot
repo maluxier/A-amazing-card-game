@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="DungeonMake2.0"
+config/name="DungeonMake2.0（git测试版）"
 run/main_scene="uid://dh74i2vi5p7q8"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
