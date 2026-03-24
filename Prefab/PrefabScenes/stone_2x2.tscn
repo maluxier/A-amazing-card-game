@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://0sqljl1xfm7p"]
+
+[ext_resource type="Texture2D" uid="uid://b4fro0wf5l1jq" path="res://Assets/tile_066.png" id="1_dpqaj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lweov"]
+size = Vector2(28.3872, 28.0444)
+
+[node name="StaticBody2D" type="StaticBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_dpqaj")
+centered = false
+offset = Vector2(-26.675, -24.94)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-16.0415, -1.81835)
+rotation = 0.509636
+skew = 0.523599
+shape = SubResource("RectangleShape2D_lweov")
+one_way_collision_margin = 0.0

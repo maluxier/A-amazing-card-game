@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="map_data" load_steps=2 format=3 uid="uid://cjh623kshngou"]
+
+[ext_resource type="Script" uid="uid://dfb3xtl5uc3qo" path="res://Script/Data/DataScript/MapData.gd" id="1_gv4kv"]
+
+[resource]
+script = ExtResource("1_gv4kv")
+MapSize = Vector2i(300, 300)
+MinSpliteSize = 70
+MinRoomSize = 40
+RoomPadding = 5
+CorridorHeight = 2
+SplitDepth = 5
+metadata/_custom_type_script = "uid://dfb3xtl5uc3qo"

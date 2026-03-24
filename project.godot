@@ -1,9 +1,17 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
 config_version=5
 
 [application]
 
-config/name="BSP算法生成地牢（github测试版）"
-run/main_scene="uid://3jcmlg3wbnse"
+config/name="DungeonMake2.0"
+run/main_scene="uid://dh74i2vi5p7q8"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ObstacleData" load_steps=3 format=3 uid="uid://dmxtjodor3jnd"]
+
+[ext_resource type="Script" uid="uid://d50ppdk2ok6k" path="res://Script/Data/DataScript/ObstacleData.gd" id="1_4ytnq"]
+[ext_resource type="PackedScene" uid="uid://bgnpgqfel4t4t" path="res://Prefab/PrefabScenes/tree_2x1.tscn" id="1_apm7i"]
+
+[resource]
+script = ExtResource("1_4ytnq")
+ObstacleName = ""
+Scene = ExtResource("1_apm7i")
+Size = Vector2i(1, 2)
+Weight = 20
+metadata/_custom_type_script = "uid://d50ppdk2ok6k"

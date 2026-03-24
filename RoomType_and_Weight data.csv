@@ -1,0 +1,5 @@
+ID,RoomType,RoomWeight,TypeName
+001,0,0,START
+002,1,5,BOSS
+003,2,50,NORMAL
+004,3,30,TAMP

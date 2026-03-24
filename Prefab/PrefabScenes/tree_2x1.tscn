@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgnpgqfel4t4t"]
+
+[ext_resource type="Texture2D" uid="uid://d3s0f2owuivy2" path="res://Assets/tile_048.png" id="1_tmq1g"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tmq1g"]
+radius = 5.36469
+height = 24.1457
+
+[node name="StaticBody2D" type="StaticBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_tmq1g")
+centered = false
+offset = Vector2(-23.08, -18.53)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5, 2)
+rotation = 1.10305
+shape = SubResource("CapsuleShape2D_tmq1g")

@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://i38ped4vvbn2"]
+
+[ext_resource type="Texture2D" uid="uid://cfil6scmxenmr" path="res://Assets/tile_064.png" id="1_piner"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ihhf6"]
+resource_local_to_scene = true
+size = Vector2(8.96358, 8.40336)
+
+[node name="StaticBody2D" type="StaticBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.675, 0.675)
+texture = ExtResource("1_piner")
+centered = false
+offset = Vector2(-15.845, -25.21)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3.5)
+scale = Vector2(1.785, 1.785)
+shape = SubResource("RectangleShape2D_ihhf6")
