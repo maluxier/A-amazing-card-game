@@ -4,11 +4,11 @@ extends Node2D
 class_name DungeonLogic
 
 var map_size: Vector2i#单层地图尺寸
-var min_splite_size = 0#最小分割块
-var min_room_size = 0#最小房间块
-var room_padding = 0#房间块与分割块之间的距离
-var corridor_height = 0#走廊宽度
-var split_depth = 0#BSP分割深度
+var min_splite_size: int#最小分割块
+var min_room_size: int#最小房间块
+var room_padding: int#房间块与分割块之间的距离
+var corridor_height: int#走廊宽度
+var split_depth: int#BSP分割深度
 
 @onready var tilemap: TileMapLayer = $TileMapLayer#地形瓦片地图
 
@@ -69,6 +69,7 @@ func collect_room_leaf(node:BSPNode):
 		if node.left_child: collect_room_leaf(node.left_child)
 		if node.right_child: collect_room_leaf(node.right_child)
 	print("地牢生成逻辑：已提取房间分割块")
+	
 
 
 #寻找房间之间的中心点
@@ -173,3 +174,9 @@ func draw_tilemap():
 				tilemap.set_cell(Vector2i(x, y), current_source_id, current_atlas_coords)
 		
 	print("地牢生成逻辑:已绘制瓦片")
+	
+
+func data_upload(world_leaf_node: Array[BSPNode], world_corridor: Dictionary):
+	world_leaf_node = leaf_node
+	
+	pass

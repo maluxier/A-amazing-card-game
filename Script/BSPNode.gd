@@ -5,6 +5,8 @@ extends RefCounted
 
 class_name BSPNode
 
+signal WorldRoom_change(new_room_occ: Dictionary)
+
 var bounds: Rect2i#当前分割块的边界
 var left_child: BSPNode#分割后左边的子块
 var right_child: BSPNode#分割后右边的子块
@@ -70,3 +72,13 @@ func create_room(min_room_size: int, padding: int):
 		var room_pos_x = bounds.position.x + randi_range(padding, max_x)
 		var room_pos_y = bounds.position.y + randi_range(padding, max_y)
 		room = Rect2i(room_pos_x, room_pos_y, room_w, room_h)
+		
+		var temp_room_croods = {}
+		temp_room_croods.clear()
+		for x in range(room.position.x, room.end.x):
+			for y in range(room.position.y, room.end.y):
+				var room_occupied = Vector2i(x, y)
+				if not temp_room_croods.has(room_occupied):
+					temp_room_croods[room_occupied] = true
+		
+		WorldRoom_change.emit(temp_room_croods)

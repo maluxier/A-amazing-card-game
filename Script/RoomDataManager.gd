@@ -6,7 +6,7 @@ extends Node2D
 class_name RoomDataManager
 
 @export var csv_file_path: String = "res://RoomType_and_Weight data.csv"
-var room_types = []
+var room_types: Array
 
 func _ready() -> void:
 	load_room_types(csv_file_path)
