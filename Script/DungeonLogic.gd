@@ -3,6 +3,12 @@
 extends Node2D
 class_name DungeonLogic
 
+@export var tilemap: TileMapLayer
+@export var room_data_manager: RoomDataManager
+
+signal World_leaf_node_change(new_leaf_node: Array[BSPNode])
+signal WorldRoom_change(new_room_occ: Dictionary)
+
 var map_size: Vector2i#单层地图尺寸
 var min_splite_size: int#最小分割块
 var min_room_size: int#最小房间块
@@ -10,9 +16,6 @@ var room_padding: int#房间块与分割块之间的距离
 var corridor_height: int#走廊宽度
 var split_depth: int#BSP分割深度
 
-@onready var tilemap: TileMapLayer = $TileMapLayer#地形瓦片地图
-
-@onready var room_data_manager: RoomDataManager = %RoomDataManager
 
 var root_node: BSPNode#起始分割块
 var leaf_node: Array[BSPNode] = []#子分割块
@@ -42,7 +45,10 @@ func generate_dungeon(data:map_data):
 	
 	split_tree(root_node, split_depth)
 	root_node.create_room(min_room_size, room_padding)
+	
 	collect_room_leaf(root_node)
+	World_leaf_node_change.emit(leaf_node)
+	
 	generate_corridors(root_node)
 	set_room_type()
 	draw_tilemap()
@@ -68,9 +74,22 @@ func collect_room_leaf(node:BSPNode):
 	else:
 		if node.left_child: collect_room_leaf(node.left_child)
 		if node.right_child: collect_room_leaf(node.right_child)
-	print("地牢生成逻辑：已提取房间分割块")
 	
+	
+	print("地牢生成逻辑：已提取房间分割块")
 
+#房间占位方法
+func room_occupied(leaf_node: Array[BSPNode]):
+	for node in leaf_node:
+		var temp_room_occ = {}
+		temp_room_occ.clear()
+		
+		for x in range(node.room.position.x, node.room.end.x):
+			for y in range(node.room.position.y, node.room.end.y):
+				var room_coords = Vector2i(x, y)
+				if not temp_room_occ.has(room_coords):
+					temp_room_occ[room_coords] = true
+		WorldRoom_change.emit(temp_room_occ)
 
 #寻找房间之间的中心点
 func get_room_center(node:BSPNode) -> Vector2i:
@@ -174,9 +193,3 @@ func draw_tilemap():
 				tilemap.set_cell(Vector2i(x, y), current_source_id, current_atlas_coords)
 		
 	print("地牢生成逻辑:已绘制瓦片")
-	
-
-func data_upload(world_leaf_node: Array[BSPNode], world_corridor: Dictionary):
-	world_leaf_node = leaf_node
-	
-	pass
