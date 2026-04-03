@@ -5,7 +5,7 @@ extends Node2D
 
 class_name RoomDataManager
 
-@export var csv_file_path: String = "res://RoomType_and_Weight data.csv"
+@export var csv_file_path: String = "res://DungeonScene/DataBase/RoomType_and_Weight data.csv"
 var room_types: Array
 
 func _ready() -> void:
@@ -16,7 +16,7 @@ func load_room_types(path:String):
 
 	var file = FileAccess.open(path, FileAccess.READ)
 	if file == null:
-		print("无法打开文件")
+		print("房间数据管理器：无法打开文件")
 		return
 	file.get_line() # 跳过表头
 

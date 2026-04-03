@@ -1,9 +1,9 @@
 [gd_scene load_steps=4 format=4 uid="uid://i38ped4vvbn2"]
 
-[ext_resource type="Texture2D" uid="uid://cnxqt45v08wys" path="res://Assets/spritesheet.png" id="1_piner"]
+[ext_resource type="Texture2D" uid="uid://cnxqt45v08wys" path="res://DungeonScene/Assets/spritesheet.png" id="1_hnsbw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_piner"]
-texture = ExtResource("1_piner")
+texture = ExtResource("1_hnsbw")
 texture_region_size = Vector2i(32, 16)
 3:6/size_in_atlas = Vector2i(1, 2)
 3:6/0 = 0

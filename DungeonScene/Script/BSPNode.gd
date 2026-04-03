@@ -1,6 +1,5 @@
 #BSP算法类
 #作用：分割地图、生成房间
-
 extends RefCounted
 
 class_name BSPNode

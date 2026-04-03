@@ -1,13 +1,14 @@
-[gd_scene load_steps=13 format=3 uid="uid://dh74i2vi5p7q8"]
+[gd_scene load_steps=14 format=3 uid="uid://dh74i2vi5p7q8"]
 
-[ext_resource type="Script" uid="uid://bx24st46mifft" path="res://Script/TotalityManager.gd" id="1_6whob"]
-[ext_resource type="Script" uid="uid://dx4lvafgfcl7b" path="res://Script/RoomDataManager.gd" id="2_u7krg"]
-[ext_resource type="Script" uid="uid://cwluk54iubbr1" path="res://Script/DungeonLogic.gd" id="3_tx0tn"]
-[ext_resource type="Script" uid="uid://c18vulxtnxhi3" path="res://Scenes/Obstacle_manager.gd" id="3_u7krg"]
-[ext_resource type="Texture2D" uid="uid://cnxqt45v08wys" path="res://Assets/spritesheet.png" id="4_wjtap"]
-[ext_resource type="Script" uid="uid://b1a01ywr2bx1b" path="res://Scenes/ObstaticLogic.gd" id="6_wjtap"]
-[ext_resource type="Resource" uid="uid://dasjm0q57jhli" path="res://Scenes/ObstaticPrefabScenes/Stone.tres" id="7_chwn1"]
-[ext_resource type="Script" uid="uid://qys1xukmej7g" path="res://Scenes/dungeon_event.gd" id="7_v7gqg"]
+[ext_resource type="Script" uid="uid://bx24st46mifft" path="res://DungeonScene/Script/Manager/TotalityManager.gd" id="1_6whob"]
+[ext_resource type="Resource" uid="uid://b1td3kvqbdhl6" path="res://DungeonScene/DataBase/ResourseData/Map_data.tres" id="2_8w3wl"]
+[ext_resource type="Script" uid="uid://dx4lvafgfcl7b" path="res://DungeonScene/Script/Manager/RoomDataManager.gd" id="2_u7krg"]
+[ext_resource type="Script" uid="uid://cwluk54iubbr1" path="res://DungeonScene/Script/DungeonLogic.gd" id="3_tx0tn"]
+[ext_resource type="Script" uid="uid://c18vulxtnxhi3" path="res://DungeonScene/Script/Manager/Obstacle_manager.gd" id="3_u7krg"]
+[ext_resource type="Texture2D" uid="uid://cnxqt45v08wys" path="res://DungeonScene/Assets/spritesheet.png" id="4_wjtap"]
+[ext_resource type="Script" uid="uid://b1a01ywr2bx1b" path="res://DungeonScene/Script/ObstaticLogic.gd" id="6_wjtap"]
+[ext_resource type="Resource" uid="uid://dasjm0q57jhli" path="res://DungeonScene/DataBase/ResourseData/Stone.tres" id="7_chwn1"]
+[ext_resource type="Script" uid="uid://qys1xukmej7g" path="res://DungeonScene/Script/dungeon_event.gd" id="7_v7gqg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0e48y"]
 texture = ExtResource("4_wjtap")
@@ -47,6 +48,7 @@ sources/1 = SubResource("TileSetAtlasSource_tx0tn")
 [node name="TotalityManager" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_6whob")
+MAP_DATA = ExtResource("2_8w3wl")
 
 [node name="RoomDataManager" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -65,9 +67,10 @@ room_data_manager = NodePath("../RoomDataManager")
 [node name="TileMapLayer" type="TileMapLayer" parent="DungeonLogic"]
 tile_set = SubResource("TileSet_epypp")
 
-[node name="ObstaticNode" type="Node2D" parent="."]
+[node name="ObstaticNode" type="Node2D" parent="." node_paths=PackedStringArray("obstaclemap")]
 y_sort_enabled = true
 script = ExtResource("6_wjtap")
+obstaclemap = NodePath("../DungeonLogic/TileMapLayer")
 test_obstacle = Array[Resource]([ExtResource("7_chwn1")])
 
 [node name="ObstacleLayer" type="TileMapLayer" parent="ObstaticNode"]
@@ -81,6 +84,7 @@ unique_name_in_owner = true
 script = ExtResource("7_v7gqg")
 
 [connection signal="WorldRoom_change" from="DungeonLogic" to="TotalityManager" method="_on_dungeon_logic_world_room_change"]
+[connection signal="WorldWall_change" from="DungeonLogic" to="TotalityManager" method="_on_dungeon_logic_world_wall_change"]
 [connection signal="World_leaf_node_change" from="DungeonLogic" to="TotalityManager" method="_on_dungeon_logic_world_leaf_node_change"]
 [connection signal="WorldGap_change" from="ObstaticNode" to="TotalityManager" method="_on_obstatic_node_world_gap_change"]
 [connection signal="WorldObstacle_change" from="ObstaticNode" to="TotalityManager" method="_on_obstatic_node_world_obstacle_change"]

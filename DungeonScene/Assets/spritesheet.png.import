@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4fro0wf5l1jq"
-path="res://.godot/imported/tile_066.png-2c00fc1b7b27771118d5fbafbae9afe8.ctex"
+uid="uid://cnxqt45v08wys"
+path="res://.godot/imported/spritesheet.png-ab1c3a149978d4c47a8583fb1c541863.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/tile_066.png"
-dest_files=["res://.godot/imported/tile_066.png-2c00fc1b7b27771118d5fbafbae9afe8.ctex"]
+source_file="res://DungeonScene/Assets/spritesheet.png"
+dest_files=["res://.godot/imported/spritesheet.png-ab1c3a149978d4c47a8583fb1c541863.ctex"]
 
 [params]
 

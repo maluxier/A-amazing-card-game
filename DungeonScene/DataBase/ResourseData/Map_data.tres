@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="map_data" load_steps=2 format=3 uid="uid://b1td3kvqbdhl6"]
 
-[ext_resource type="Script" uid="uid://somspqa4al1y" path="res://Script/Data/DataScript/Map_data.gd" id="1_ydalu"]
+[ext_resource type="Script" uid="uid://somspqa4al1y" path="res://DungeonScene/Script/Data/Map_data.gd" id="1_ydalu"]
 
 [resource]
 script = ExtResource("1_ydalu")

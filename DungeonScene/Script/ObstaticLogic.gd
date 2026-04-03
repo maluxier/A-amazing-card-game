@@ -23,9 +23,9 @@ func generate_obstacle(leaf_node: Array[BSPNode], world_obstacle: Dictionary, wo
 		var rect = get_room(node)
 		for t in range(10):
 			var obstacle_data = test_obstacle.pick_random()
-			for i in range(200):
-				var place_coords = Vector2i(randi_range(rect.position.x, rect.end.x), randi_range(rect.position.y, rect.end.y))
-				obstacle_occupied(place_coords, obstacle_data, world_obstacle, world_wall, world_corridor, world_gap)
+			var place_coords = Vector2i(randi_range(rect.position.x, rect.end.x), randi_range(rect.position.y, rect.end.y))
+			obstacle_occupied(place_coords, obstacle_data, world_obstacle, world_wall, world_corridor, world_gap)
+			
 
 
 func get_room(node:BSPNode) -> Rect2i:
@@ -56,6 +56,7 @@ func obstacle_occupied(place_pos: Vector2i, obstacle_data: Resource, Obstacle_oc
 			var gap_world_coords = v1 + v2
 			if Obstacle_occ.has(gap_world_coords) or Corridor_occ.has(gap_world_coords):
 				temp_gap_coords.clear()
+				temp_obstacle_coords.clear()
 				return
 			elif not temp_gap_coords.has(gap_world_coords):
 				if not temp_obstacle_coords.has(gap_world_coords):
@@ -63,15 +64,20 @@ func obstacle_occupied(place_pos: Vector2i, obstacle_data: Resource, Obstacle_oc
 				else:
 					continue
 			
-		WorldObstacle_change.emit(temp_obstacle_coords)
-		print("障碍物生成器：障碍物已占位")
-			
-		WorldGap_change.emit(temp_gap_coords)
-		print("障碍物生成器：间隔已占位")
-			
-		place_obstacle(place_pos, obstacle_data.obstacle_scene)
+	WorldObstacle_change.emit(temp_obstacle_coords)
+	print("障碍物生成器：障碍物已占位")
+		
+	WorldGap_change.emit(temp_gap_coords)
+	print("障碍物生成器：间隔已占位")
+		
+	place_obstacle(place_pos, obstacle_data.obstacle_scene)
 
 
 func place_obstacle(obstacle_place_coord:Vector2i, obstacle_ins_scene: PackedScene):
-	
+	var instance = obstacle_ins_scene.instantiate()
+	#var world_pos = obstaclemap.map_to_local(obstacle_place_coord)
+	var world_pos = obstaclemap.to_global(obstaclemap.map_to_local(obstacle_place_coord))
+	instance.position = world_pos
+	add_child(instance)
+	print("障碍物生成器：障碍物已生成")
 	pass

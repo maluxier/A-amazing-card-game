@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ObstacleHub" load_steps=3 format=3 uid="uid://dasjm0q57jhli"]
 
-[ext_resource type="PackedScene" uid="uid://i38ped4vvbn2" path="res://Prefab/PrefabScenes/test_obstatic.tscn" id="1_xtkmm"]
-[ext_resource type="Script" uid="uid://d08q1746n50nt" path="res://Script/Data/DataScript/ObstacleHub.gd" id="2_lchn8"]
+[ext_resource type="PackedScene" uid="uid://i38ped4vvbn2" path="res://DungeonScene/Scenes/PrefabScenes/test_obstatic.tscn" id="1_xtkmm"]
+[ext_resource type="Script" uid="uid://d08q1746n50nt" path="res://DungeonScene/Script/Data/ObstacleHub.gd" id="2_lchn8"]
 
 [resource]
 script = ExtResource("2_lchn8")

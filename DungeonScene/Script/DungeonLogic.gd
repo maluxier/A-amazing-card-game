@@ -8,6 +8,7 @@ class_name DungeonLogic
 
 signal World_leaf_node_change(new_leaf_node: Array[BSPNode])
 signal WorldRoom_change(new_room_occ: Dictionary)
+signal WorldWall_change(new_wall_occ: Dictionary)
 
 var map_size: Vector2i#单层地图尺寸
 var min_splite_size: int#最小分割块
@@ -74,8 +75,6 @@ func collect_room_leaf(node:BSPNode):
 	else:
 		if node.left_child: collect_room_leaf(node.left_child)
 		if node.right_child: collect_room_leaf(node.right_child)
-	
-	
 	print("地牢生成逻辑：已提取房间分割块")
 
 #房间占位方法
@@ -90,6 +89,30 @@ func room_occupied(leaf_node: Array[BSPNode]):
 				if not temp_room_occ.has(room_coords):
 					temp_room_occ[room_coords] = true
 		WorldRoom_change.emit(temp_room_occ)
+
+
+func wall_set(world_room: Dictionary, world_corridor: Dictionary):
+	var used_cells = tilemap.get_used_cells()
+	if used_cells.is_empty():
+		print("地牢生成逻辑：墙壁方法获取地图数据为空")
+		return
+	
+	var direction = [
+		Vector2i(1,0), Vector2i(-1,0),
+		Vector2i(0,1), Vector2i(0,-1), 
+		Vector2i(1,1), Vector2i(-1,-1),
+		Vector2i(1,-1), Vector2i(-1,1)]
+	
+	var temp_wall_corrds = {}
+	for cell in used_cells:
+		for v1 in direction:
+			var check_pos = cell + v1
+			if not world_room.has(check_pos) and not world_corridor.has(check_pos):
+				if not temp_wall_corrds.has(check_pos):
+					temp_wall_corrds[check_pos] = true
+				
+	WorldWall_change.emit(temp_wall_corrds)
+	print("地牢生成逻辑：已完成墙壁占位")
 
 #寻找房间之间的中心点
 func get_room_center(node:BSPNode) -> Vector2i:
@@ -193,3 +216,11 @@ func draw_tilemap():
 				tilemap.set_cell(Vector2i(x, y), current_source_id, current_atlas_coords)
 		
 	print("地牢生成逻辑:已绘制瓦片")
+
+
+func testSetTile(world_occ: Dictionary):
+	var sourceID = 0
+	var atlasCoords = Vector2i(4, 4)
+	for v1 in world_occ:
+		tilemap.set_cell(v1, sourceID, atlasCoords)
+	pass
