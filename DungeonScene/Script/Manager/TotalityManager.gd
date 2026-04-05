@@ -4,9 +4,11 @@ extends Node2D
 
 
 @onready var dungeon_logic: DungeonLogic = %DungeonLogic
-@onready var obstatic_logic: ObstacleLogic = $"../ObstaticNode"
-@onready var obstacle_manager: Obstacle_manager = %ObstacleManager
+@onready var obstatic_logic: ObstacleLogic = $"../ObstaticLogic"
 @onready var room_data_manager: RoomDataManager = %RoomDataManager
+@onready var wall_set_logic: wallSetLogic = $"../WallSetLogic"
+
+
 
 var World_obstacle: Dictionary = {}
 var World_wall: Dictionary = {}
@@ -22,16 +24,18 @@ func _ready() -> void:
 	
 	dungeon_logic.World_leaf_node_change.connect(_on_dungeon_logic_world_leaf_node_change)
 	dungeon_logic.WorldRoom_change.connect(_on_dungeon_logic_world_room_change)
-	dungeon_logic.WorldWall_change.connect(_on_dungeon_logic_world_wall_change)
+	wall_set_logic.WorldWall_change.connect(_on_wall_set_logic_world_wall_change)
 	obstatic_logic.WorldObstacle_change.connect(_on_obstatic_node_world_obstacle_change)
 	obstatic_logic.WorldGap_change.connect(_on_obstatic_node_world_gap_change)
 	
 	dungeon_logic.generate_dungeon(MAP_DATA)
 	dungeon_logic.room_occupied(leaf_node)
-	dungeon_logic.wall_set(World_room, World_corridor)
+	
+	wall_set_logic.wall_occ(World_room, World_corridor)
+	wall_set_logic.set_wall(World_wall)
 	
 	obstatic_logic.generate_obstacle(leaf_node, World_obstacle, World_corridor, World_wall, World_gap)
-	dungeon_logic.testSetTile(World_obstacle)
+	#dungeon_logic.testSetTile(World_obstacle)
 	
 	#print(World_wall)
 	#print(World_gap)
@@ -60,7 +64,15 @@ func _on_dungeon_logic_world_room_change(new_room_occ: Dictionary) -> void:
 			World_room[room] = true
 
 
-func _on_dungeon_logic_world_wall_change(new_wall_occ: Dictionary) -> void:
+func _on_wall_set_logic_world_wall_change(new_wall_occ: Dictionary) -> void:
 	for wall in new_wall_occ:
 		if not World_wall.has(wall):
 			World_wall[wall] = true
+
+
+func _on_dungeon_logic_world_corridor_change(new_corridor_occ: Dictionary) -> void:
+	for corridor in new_corridor_occ:
+		if not World_corridor.has(corridor) and not World_room.has(corridor):
+			World_corridor[corridor] = true
+		else:
+			continue

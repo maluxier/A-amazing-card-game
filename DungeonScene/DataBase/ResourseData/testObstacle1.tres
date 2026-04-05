@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ObstacleHub" load_steps=3 format=3 uid="uid://cw7xwx4s5b1i7"]
+
+[ext_resource type="Script" uid="uid://d08q1746n50nt" path="res://DungeonScene/Script/Data/ObstacleHub.gd" id="1_3cj8j"]
+[ext_resource type="PackedScene" uid="uid://bjqfwbslna44j" path="res://DungeonScene/Scenes/PrefabScenes/testobstacle1.tscn" id="1_va3y7"]
+
+[resource]
+script = ExtResource("1_3cj8j")
+obstacle_scene = ExtResource("1_va3y7")
+offset = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0), Vector2i(4, 0), Vector2i(4, 1), Vector2i(4, 2), Vector2i(3, 2), Vector2i(2, 2), Vector2i(1, 2), Vector2i(0, 2), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1)])
+back_offset_button = false
+metadata/_custom_type_script = "uid://d08q1746n50nt"

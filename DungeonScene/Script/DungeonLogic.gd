@@ -8,7 +8,8 @@ class_name DungeonLogic
 
 signal World_leaf_node_change(new_leaf_node: Array[BSPNode])
 signal WorldRoom_change(new_room_occ: Dictionary)
-signal WorldWall_change(new_wall_occ: Dictionary)
+signal WorldCorridor_change(new_corridor_occ: Dictionary)
+
 
 var map_size: Vector2i#单层地图尺寸
 var min_splite_size: int#最小分割块
@@ -51,6 +52,8 @@ func generate_dungeon(data:map_data):
 	World_leaf_node_change.emit(leaf_node)
 	
 	generate_corridors(root_node)
+	corridor_occ(corridors)
+	
 	set_room_type()
 	draw_tilemap()
 	print("地牢生成逻辑：地牢生成完成")
@@ -91,29 +94,6 @@ func room_occupied(leaf_node: Array[BSPNode]):
 		WorldRoom_change.emit(temp_room_occ)
 
 
-func wall_set(world_room: Dictionary, world_corridor: Dictionary):
-	var used_cells = tilemap.get_used_cells()
-	if used_cells.is_empty():
-		print("地牢生成逻辑：墙壁方法获取地图数据为空")
-		return
-	
-	var direction = [
-		Vector2i(1,0), Vector2i(-1,0),
-		Vector2i(0,1), Vector2i(0,-1), 
-		Vector2i(1,1), Vector2i(-1,-1),
-		Vector2i(1,-1), Vector2i(-1,1)]
-	
-	var temp_wall_corrds = {}
-	for cell in used_cells:
-		for v1 in direction:
-			var check_pos = cell + v1
-			if not world_room.has(check_pos) and not world_corridor.has(check_pos):
-				if not temp_wall_corrds.has(check_pos):
-					temp_wall_corrds[check_pos] = true
-				
-	WorldWall_change.emit(temp_wall_corrds)
-	print("地牢生成逻辑：已完成墙壁占位")
-
 #寻找房间之间的中心点
 func get_room_center(node:BSPNode) -> Vector2i:
 	#如果房间是矩形，返回房间中心点
@@ -126,7 +106,7 @@ func get_room_center(node:BSPNode) -> Vector2i:
 		return get_room_center(node.right_child)
 
 
-#走廊占位
+#走廊标记
 func create_corridor_rect(start:Vector2i, end:Vector2i, corridor_height: int):
 	#用rect2i连接两个中心点
 	var rect = Rect2i()
@@ -144,6 +124,21 @@ func create_corridor_rect(start:Vector2i, end:Vector2i, corridor_height: int):
 	
 	corridors.append(rect)
 	print("地牢生成逻辑：已完成走廊占位")
+
+
+func corridor_occ(corridors: Array[Rect2i]):
+	if corridors.is_empty():
+		print("地牢生成逻辑：走廊数据为空")
+		
+	var temp_corridor_occ = {}
+	for corridor_rect in corridors:
+		for x in range(corridor_rect.position.x, corridor_rect.end.x):
+			for y in range(corridor_rect.position.y, corridor_rect.end.y):
+				var corridor_coords = Vector2i(x, y)
+				if not temp_corridor_occ.has(corridor_coords):
+					temp_corridor_occ[corridor_coords] = true
+					
+	WorldCorridor_change.emit(temp_corridor_occ)
 
 
 #走廊生成（连接同级房间节点）
@@ -187,8 +182,8 @@ func draw_tilemap():
 	#清空当前地图
 	tilemap.clear()
 	
-	var current_source_id = 0
-	var current_atlas_coords = Vector2i(16, 10)
+	var current_source_id = 2
+	var current_atlas_coords = Vector2i(17, 1)
 	#绘制走廊
 	for c in corridors:
 		for x in range(c.position.x, c.end.x):
@@ -200,17 +195,17 @@ func draw_tilemap():
 		var r = node.room
 		match node.room_type:
 			0:
-				current_source_id = 0
-				current_atlas_coords = Vector2i(6, 4)
+				current_source_id = 1
+				current_atlas_coords = Vector2i(8, 1)
 			1:
-				current_source_id = 0
-				current_atlas_coords = Vector2i(4, 4)
+				current_source_id = 1
+				current_atlas_coords = Vector2i(5, 21)
 			2:
-				current_source_id = 0
-				current_atlas_coords = Vector2i(16, 10)
+				current_source_id = 1
+				current_atlas_coords = Vector2i(5, 1)
 			3:
-				current_source_id = 0
-				current_atlas_coords = Vector2i(10, 2)
+				current_source_id = 1
+				current_atlas_coords = Vector2i(1, 20)
 		for x in range(r.position.x, r.end.x):
 			for y in range(r.position.y, r.end.y):
 				tilemap.set_cell(Vector2i(x, y), current_source_id, current_atlas_coords)
@@ -218,9 +213,9 @@ func draw_tilemap():
 	print("地牢生成逻辑:已绘制瓦片")
 
 
-func testSetTile(world_occ: Dictionary):
-	var sourceID = 0
-	var atlasCoords = Vector2i(4, 4)
-	for v1 in world_occ:
-		tilemap.set_cell(v1, sourceID, atlasCoords)
-	pass
+#func testSetTile(world_occ: Dictionary):
+	#var sourceID = 1
+	#var atlasCoords = Vector2i(11, 1)
+	#for v1 in world_occ:
+		#tilemap.set_cell(v1, sourceID, atlasCoords)
+	#pass

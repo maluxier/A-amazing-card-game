@@ -75,9 +75,9 @@ func obstacle_occupied(place_pos: Vector2i, obstacle_data: Resource, Obstacle_oc
 
 func place_obstacle(obstacle_place_coord:Vector2i, obstacle_ins_scene: PackedScene):
 	var instance = obstacle_ins_scene.instantiate()
-	#var world_pos = obstaclemap.map_to_local(obstacle_place_coord)
-	var world_pos = obstaclemap.to_global(obstaclemap.map_to_local(obstacle_place_coord))
-	instance.position = world_pos
-	add_child(instance)
+	var world_pos = obstaclemap.map_to_local(obstacle_place_coord)
+	var offset = Vector2(obstaclemap.tile_set.tile_size)/2.0
+	instance.global_position = obstaclemap.to_global(world_pos - offset)
+	obstaclemap.add_child(instance)
 	print("障碍物生成器：障碍物已生成")
 	pass
