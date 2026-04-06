@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://cv36ihxkcgkjc"]
+
+[ext_resource type="Texture2D" uid="uid://5nbijmly8la5" path="res://DungeonScene/Assets/Dungeon_Tiles.png" id="1_ig7pt"]
+[ext_resource type="Script" uid="uid://nhd6ptfwfo1e" path="res://DungeonScene/Script/Wall_shelter.gd" id="2_4ituk"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4ituk"]
+texture = ExtResource("1_ig7pt")
+1:1/size_in_atlas = Vector2i(1, 2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, 8)
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_pn33w"]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 2
+sources/0 = SubResource("TileSetAtlasSource_4ituk")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pn33w"]
+size = Vector2(16, 32)
+
+[node name="Wall" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0)
+tile_set = SubResource("TileSet_pn33w")
+
+[node name="Area2D" type="Area2D" parent="."]
+script = ExtResource("2_4ituk")
+target_node = NodePath("../TileMapLayer")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(8, 0)
+shape = SubResource("RectangleShape2D_pn33w")
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Area2D" to="Area2D" method="_on_body_exited"]

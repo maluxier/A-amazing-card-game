@@ -17,12 +17,12 @@ func _init(rect: Rect2i):
 	bounds = rect
 
 
-func split(min_split: int) -> bool:
+func split(min_split: int, rng: RandomNumberGenerator) -> bool:
 	#判断是否已分割
 	if left_child != null or right_child != null:
 		return false
 	#分割方向横or竖
-	var split_horizontally = randf() > 0.5
+	var split_horizontally = rng.randf() > 0.5
 	if bounds.size.x > bounds.size.y * 1:
 		split_horizontally = false
 	if bounds.size.y > bounds.size.x * 1:
@@ -32,7 +32,7 @@ func split(min_split: int) -> bool:
 	if max_split <= min_split:
 		return false
 	#设置分割点
-	var split_point = randi_range(min_split, max_split)
+	var split_point = rng.randi_range(min_split, max_split)
 	#分割
 	if split_horizontally:
 		left_child = BSPNode.new(Rect2i(bounds.position.x, bounds.position.y, bounds.size.x, split_point))
@@ -43,11 +43,11 @@ func split(min_split: int) -> bool:
 	return true
 
 #分配房间
-func create_room(min_room_size: int, padding: int):
+func create_room(min_room_size: int, padding: int, rng: RandomNumberGenerator):
 	#递归
 	if left_child != null or right_child != null:
-		if left_child: left_child.create_room(min_room_size, padding)
-		if right_child: right_child.create_room(min_room_size, padding)
+		if left_child: left_child.create_room(min_room_size, padding, rng)
+		if right_child: right_child.create_room(min_room_size, padding, rng)
 	else:
 		var max_w = bounds.size.x - padding * 2
 		var max_h = bounds.size.y - padding * 2
@@ -55,8 +55,8 @@ func create_room(min_room_size: int, padding: int):
 		var safe_min_w = mini(min_room_size, max_w)
 		var safe_min_h = mini(min_room_size, max_h)
 		
-		var room_w = randi_range(safe_min_w, max_w)#房间宽
-		var room_h = randi_range(safe_min_h, max_h)#房间高
+		var room_w = rng.randi_range(safe_min_w, max_w)#房间宽
+		var room_h = rng.randi_range(safe_min_h, max_h)#房间高
 		
 		#限制房间长宽比，防止出现面条房
 		var max_ratio = 1.8
@@ -68,8 +68,8 @@ func create_room(min_room_size: int, padding: int):
 		var max_x = maxi(padding, bounds.size.x - room_w - padding)
 		var max_y = maxi(padding, bounds.size.y - room_h - padding)
 		
-		var room_pos_x = bounds.position.x + randi_range(padding, max_x)
-		var room_pos_y = bounds.position.y + randi_range(padding, max_y)
+		var room_pos_x = bounds.position.x + rng.randi_range(padding, max_x)
+		var room_pos_y = bounds.position.y + rng.randi_range(padding, max_y)
 		room = Rect2i(room_pos_x, room_pos_y, room_w, room_h)
 		
 		var temp_room_croods = {}

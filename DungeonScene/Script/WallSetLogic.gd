@@ -34,13 +34,21 @@ func wall_occ(world_room: Dictionary, world_corridor: Dictionary):
 	print("地牢生成逻辑：已完成墙壁占位")
 
 
-func set_wall(world_wall_occ: Dictionary):
-	var source_ID = 2
-	var atlas_coords = Vector2i(1, 1)
-	
-	if world_wall_occ.is_empty():
-		print("墙壁生成器：墙壁占位数据为空")
-		return
-	
-	for wall in world_wall_occ:
-		wallLayer.set_cell(wall, source_ID, atlas_coords)
+func set_wall(world_wall_occ: Dictionary, wall: PackedScene):
+	if world_wall_occ.is_empty(): return
+	if wall == null: return
+	for wall_coord in world_wall_occ:
+		var instance = wall.instantiate()
+		var world_pos = wallLayer.map_to_local(wall_coord)
+		var offset = Vector2(wallLayer.tile_set.tile_size)/2.0
+		instance.global_position = wallLayer.to_global(world_pos - offset)
+		wallLayer.add_child(instance)
+	#var source_ID = 2
+	#var atlas_coords = Vector2i(1, 1)
+	#
+	#if world_wall_occ.is_empty():
+		#print("墙壁生成器：墙壁占位数据为空")
+		#return
+	#
+	#for wall in world_wall_occ:
+		#wallLayer.set_cell(wall, source_ID, atlas_coords)

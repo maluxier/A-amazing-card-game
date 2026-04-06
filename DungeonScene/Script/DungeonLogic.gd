@@ -3,6 +3,8 @@
 extends Node2D
 class_name DungeonLogic
 
+var mySeed: RandomNumberGenerator
+
 @export var tilemap: TileMapLayer
 @export var room_data_manager: RoomDataManager
 
@@ -46,7 +48,7 @@ func generate_dungeon(data:map_data):
 	tilemap.clear()
 	
 	split_tree(root_node, split_depth)
-	root_node.create_room(min_room_size, room_padding)
+	root_node.create_room(min_room_size, room_padding, mySeed)
 	
 	collect_room_leaf(root_node)
 	World_leaf_node_change.emit(leaf_node)
@@ -63,7 +65,7 @@ func split_tree(node: BSPNode, depth: int):
 	#判断是否需要分割
 	if depth == 0: return
 	#分割
-	if node.split(min_room_size):
+	if node.split(min_room_size, mySeed):
 		split_tree(node.left_child, depth - 1)
 		split_tree(node.right_child, depth - 1)
 	print("地牢生成逻辑：已分割地图")
@@ -123,7 +125,7 @@ func create_corridor_rect(start:Vector2i, end:Vector2i, corridor_height: int):
 		rect.size.x += 1
 	
 	corridors.append(rect)
-	print("地牢生成逻辑：已完成走廊占位")
+	print("地牢生成逻辑：走廊已标记")
 
 
 func corridor_occ(corridors: Array[Rect2i]):
@@ -139,6 +141,7 @@ func corridor_occ(corridors: Array[Rect2i]):
 					temp_corridor_occ[corridor_coords] = true
 					
 	WorldCorridor_change.emit(temp_corridor_occ)
+	print("地牢生成逻辑：走廊占位已完成")
 
 
 #走廊生成（连接同级房间节点）

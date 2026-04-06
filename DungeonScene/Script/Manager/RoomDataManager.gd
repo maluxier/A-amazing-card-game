@@ -2,8 +2,8 @@
 #
 
 extends Node2D
-
 class_name RoomDataManager
+var mySeed: RandomNumberGenerator
 
 @export var csv_file_path: String = "res://DungeonScene/DataBase/RoomType_and_Weight data.csv"
 var room_types: Array
@@ -49,7 +49,7 @@ func get_random_room_type():
 		push_error("严重警告：总权重计算为0！")
 		return 0
 	
-	var rand = randi_range(1, total_weigh)
+	var rand = mySeed.randi_range(1, total_weigh)
 	var sum = 0
 		
 	for r in room_types:

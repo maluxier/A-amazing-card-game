@@ -3,6 +3,7 @@
 extends Node2D
 class_name ObstacleLogic
 
+var mySeed: RandomNumberGenerator
 
 signal WorldObstacle_change(new_obstacle_occ: Dictionary)
 signal WorldGap_change(new_gap_occ: Dictionary)
@@ -23,7 +24,7 @@ func generate_obstacle(leaf_node: Array[BSPNode], world_obstacle: Dictionary, wo
 		var rect = get_room(node)
 		for t in range(10):
 			var obstacle_data = test_obstacle.pick_random()
-			var place_coords = Vector2i(randi_range(rect.position.x, rect.end.x), randi_range(rect.position.y, rect.end.y))
+			var place_coords = Vector2i(mySeed.randi_range(rect.position.x, rect.end.x), randi_range(rect.position.y, rect.end.y))
 			obstacle_occupied(place_coords, obstacle_data, world_obstacle, world_wall, world_corridor, world_gap)
 			
 

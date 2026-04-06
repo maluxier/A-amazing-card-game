@@ -1,15 +1,16 @@
-[gd_scene load_steps=17 format=3 uid="uid://dh74i2vi5p7q8"]
+[gd_scene load_steps=20 format=3 uid="uid://dh74i2vi5p7q8"]
 
 [ext_resource type="Script" uid="uid://bx24st46mifft" path="res://DungeonScene/Script/Manager/TotalityManager.gd" id="1_6whob"]
 [ext_resource type="Resource" uid="uid://b1td3kvqbdhl6" path="res://DungeonScene/DataBase/ResourseData/Map_data.tres" id="2_8w3wl"]
 [ext_resource type="Script" uid="uid://dx4lvafgfcl7b" path="res://DungeonScene/Script/Manager/RoomDataManager.gd" id="2_u7krg"]
+[ext_resource type="PackedScene" uid="uid://cv36ihxkcgkjc" path="res://DungeonScene/Scenes/PrefabScenes/wall.tscn" id="3_6aska"]
 [ext_resource type="Script" uid="uid://cwluk54iubbr1" path="res://DungeonScene/Script/DungeonLogic.gd" id="3_tx0tn"]
 [ext_resource type="Texture2D" uid="uid://5nbijmly8la5" path="res://DungeonScene/Assets/Dungeon_Tiles.png" id="6_aw6vt"]
 [ext_resource type="Script" uid="uid://b1a01ywr2bx1b" path="res://DungeonScene/Script/ObstaticLogic.gd" id="6_wjtap"]
 [ext_resource type="Texture2D" uid="uid://bj7pggdfk0ntx" path="res://DungeonScene/Assets/Floors_Tiles.png" id="7_aw6vt"]
 [ext_resource type="Resource" uid="uid://dasjm0q57jhli" path="res://DungeonScene/DataBase/ResourseData/testObstacle2.tres" id="7_chwn1"]
 [ext_resource type="Script" uid="uid://qys1xukmej7g" path="res://DungeonScene/Script/dungeon_event.gd" id="7_v7gqg"]
-[ext_resource type="Script" uid="uid://be2thp1whkyu5" path="res://DungeonScene/Scenes/WallSetLogic.gd" id="8_prqi5"]
+[ext_resource type="Script" uid="uid://be2thp1whkyu5" path="res://DungeonScene/Script/WallSetLogic.gd" id="8_prqi5"]
 [ext_resource type="Resource" uid="uid://cw7xwx4s5b1i7" path="res://DungeonScene/DataBase/ResourseData/testObstacle1.tres" id="9_prqi5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_prqi5"]
@@ -575,6 +576,26 @@ texture = ExtResource("7_aw6vt")
 sources/1 = SubResource("TileSetAtlasSource_prqi5")
 sources/2 = SubResource("TileSetAtlasSource_y6u6v")
 
+[sub_resource type="Shader" id="Shader_y6u6v"]
+code = "shader_type canvas_item;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6aska"]
+shader = SubResource("Shader_y6u6v")
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aw6vt"]
 texture = ExtResource("6_aw6vt")
 16:3/0 = 0
@@ -585,6 +606,8 @@ texture = ExtResource("6_aw6vt")
 1:1/size_in_atlas = Vector2i(1, 2)
 1:1/0 = 0
 1:1/0/texture_origin = Vector2i(0, 8)
+1:1/0/material = SubResource("ShaderMaterial_6aska")
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_prqi5"]
 physics_layer_0/collision_layer = 1
@@ -592,11 +615,17 @@ physics_layer_0/collision_mask = 2
 sources/2 = SubResource("TileSetAtlasSource_aw6vt")
 
 [node name="Dungeon" type="Node2D"]
+y_sort_enabled = true
 
-[node name="TotalityManager" type="Node2D" parent="."]
+[node name="TotalityManager" type="Node2D" parent="." node_paths=PackedStringArray("dungeon_logic", "obstatic_logic", "room_data_manager", "wall_set_logic")]
 unique_name_in_owner = true
 script = ExtResource("1_6whob")
 MAP_DATA = ExtResource("2_8w3wl")
+Wall_scene = ExtResource("3_6aska")
+dungeon_logic = NodePath("../DungeonLogic")
+obstatic_logic = NodePath("../ObstaticLogic")
+room_data_manager = NodePath("../RoomDataManager")
+wall_set_logic = NodePath("../WallSetLogic")
 
 [node name="RoomDataManager" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -615,6 +644,7 @@ obstaclemap = NodePath("../BasicTerrainLayer")
 test_obstacle = Array[Resource]([ExtResource("9_prqi5"), ExtResource("7_chwn1")])
 
 [node name="WallSetLogic" type="Node2D" parent="." node_paths=PackedStringArray("wallLayer", "basicTerrainLayer")]
+unique_name_in_owner = true
 script = ExtResource("8_prqi5")
 wallLayer = NodePath("../WallLayer")
 basicTerrainLayer = NodePath("../BasicTerrainLayer")
@@ -626,16 +656,6 @@ tile_set = SubResource("TileSet_epypp")
 y_sort_enabled = true
 tile_set = SubResource("TileSet_prqi5")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(576.545, 324.265)
-
 [node name="DungeonEvent" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("7_v7gqg")
-
-[connection signal="WorldCorridor_change" from="DungeonLogic" to="TotalityManager" method="_on_dungeon_logic_world_corridor_change"]
-[connection signal="WorldRoom_change" from="DungeonLogic" to="TotalityManager" method="_on_dungeon_logic_world_room_change"]
-[connection signal="World_leaf_node_change" from="DungeonLogic" to="TotalityManager" method="_on_dungeon_logic_world_leaf_node_change"]
-[connection signal="WorldGap_change" from="ObstaticLogic" to="TotalityManager" method="_on_obstatic_node_world_gap_change"]
-[connection signal="WorldObstacle_change" from="ObstaticLogic" to="TotalityManager" method="_on_obstatic_node_world_obstacle_change"]
-[connection signal="WorldWall_change" from="WallSetLogic" to="TotalityManager" method="_on_wall_set_logic_world_wall_change"]
