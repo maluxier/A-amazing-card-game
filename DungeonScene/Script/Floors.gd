@@ -15,7 +15,7 @@ func generate_all_floors():
 	for i in total_floors:
 		var new_dungeon = dungeon_scene.instantiate()
 		add_child(new_dungeon)
-		new_dungeon.position.y = i * 1000
+		new_dungeon.position.y = i * 5000
 		var floor_seed = rng.randi()
 		
 		var manager = new_dungeon.get_node("TotalityManager")

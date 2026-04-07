@@ -9,7 +9,7 @@ class_name totality_manager
 @export var room_data_manager: RoomDataManager
 @export var wall_set_logic: wallSetLogic
 
-
+@export var test_tilemap: TileMapLayer
 
 
 
@@ -49,7 +49,7 @@ func setup_and_generate(seed_value: int):
 	obstatic_logic.generate_obstacle(leaf_node, World_obstacle, World_corridor, World_wall, World_gap)
 	
 	
-	
+	#test_set_tiles()
 	#dungeon_logic.testSetTile(World_obstacle)
 	#print(World_wall)
 	#print(World_gap)
@@ -91,3 +91,8 @@ func _on_dungeon_logic_world_corridor_change(new_corridor_occ: Dictionary) -> vo
 			World_corridor[corridor] = true
 		else:
 			continue
+
+
+#func test_set_tiles():
+	#for obstacle in World_obstacle:
+		#test_tilemap.set_cell(obstacle, 2, Vector2i(2, 10))

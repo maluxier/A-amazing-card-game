@@ -26,6 +26,13 @@ var leaf_node: Array[BSPNode] = []#子分割块
 var corridors: Array[Rect2i] = []#走廊占用的瓦片范围
 
 
+#根据种子需求重写的pick_random()方法
+func pick_random_with_seed(array: Array, rng: RandomNumberGenerator):
+	if array.is_empty(): return null
+	
+	var random_index = rng.randi_range(0, array.size() - 1)
+	return array[random_index]
+
 #接入数据，生成单层地牢
 func generate_dungeon(data:map_data):
 	#接入数据
@@ -102,7 +109,7 @@ func get_room_center(node:BSPNode) -> Vector2i:
 	if node.room.has_area():
 		return node.room.get_center()
 	print("地牢生成逻辑：已找到房间中心点")
-	if randf() > 0.5:
+	if mySeed.randf() > 0.5:
 		return get_room_center(node.left_child)
 	else:
 		return get_room_center(node.right_child)
@@ -127,7 +134,7 @@ func create_corridor_rect(start:Vector2i, end:Vector2i, corridor_height: int):
 	corridors.append(rect)
 	print("地牢生成逻辑：走廊已标记")
 
-
+#走廊占位
 func corridor_occ(corridors: Array[Rect2i]):
 	if corridors.is_empty():
 		print("地牢生成逻辑：走廊数据为空")
@@ -156,7 +163,7 @@ func generate_corridors(node:BSPNode):
 	var center1 = get_room_center(node.left_child)
 	var center2 = get_room_center(node.right_child)
 	#随机决定先水平还是先竖直#连接走廊
-	if randf() > 0.5:
+	if mySeed.randf() > 0.5:
 		create_corridor_rect(Vector2i(center1.x, center1.y), Vector2i(center2.x, center1.y), corridor_height)
 		create_corridor_rect(Vector2i(center2.x, center1.y), Vector2i(center2.x, center2.y), corridor_height)
 	else:
@@ -168,7 +175,7 @@ func generate_corridors(node:BSPNode):
 #分配房间类型
 func set_room_type():
 	#房间列表随机一个出生点
-	var start_node = leaf_node.pick_random()
+	var start_node = pick_random_with_seed(leaf_node, mySeed)
 	start_node.room_type = 0
 	print(start_node.room_type)
 		
@@ -214,11 +221,3 @@ func draw_tilemap():
 				tilemap.set_cell(Vector2i(x, y), current_source_id, current_atlas_coords)
 		
 	print("地牢生成逻辑:已绘制瓦片")
-
-
-#func testSetTile(world_occ: Dictionary):
-	#var sourceID = 1
-	#var atlasCoords = Vector2i(11, 1)
-	#for v1 in world_occ:
-		#tilemap.set_cell(v1, sourceID, atlasCoords)
-	#pass

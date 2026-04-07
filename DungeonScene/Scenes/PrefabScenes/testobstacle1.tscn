@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=4 uid="uid://bjqfwbslna44j"]
+[gd_scene load_steps=6 format=4 uid="uid://bjqfwbslna44j"]
 
 [ext_resource type="Texture2D" uid="uid://bj7pggdfk0ntx" path="res://DungeonScene/Assets/Floors_Tiles.png" id="2_5byw1"]
+[ext_resource type="Script" uid="uid://nhd6ptfwfo1e" path="res://DungeonScene/Script/Wall_shelter.gd" id="2_oyxrl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dheif"]
 texture = ExtResource("2_5byw1")
@@ -267,8 +268,19 @@ texture = ExtResource("2_5byw1")
 [sub_resource type="TileSet" id="TileSet_oyxrl"]
 sources/0 = SubResource("TileSetAtlasSource_dheif")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5byw1"]
+size = Vector2(80, 48)
+
 [node name="testobstacle1" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray("AAAAAAAAAAACAA4AAAABAAAAAAACAA4AAAACAAAAAAACAA4AAAADAAAAAAACAA4AAAAEAAAAAAACAA4AAAAEAAEAAAACAA4AAAAEAAIAAAACAA4AAAADAAIAAAACAA4AAAACAAIAAAACAA4AAAABAAIAAAACAA4AAAAAAAIAAAACAA4AAAAAAAEAAAACAA4AAAABAAEAAAACAA4AAAACAAEAAAACAA4AAAADAAEAAAACAA4AAAA=")
 tile_set = SubResource("TileSet_oyxrl")
+
+[node name="Area2D" type="Area2D" parent="."]
+y_sort_enabled = true
+script = ExtResource("2_oyxrl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(40, 24)
+shape = SubResource("RectangleShape2D_5byw1")

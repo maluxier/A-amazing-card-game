@@ -1,15 +1,12 @@
 extends Area2D
 
-@export var target_node: NodePath
 @export var shelter_alpha = 0.6
 @export var normal_alpha = 1.0
 var target: CanvasItem
 
 func _ready() -> void:
-	target = get_node(target_node)
+	target = get_parent().get_node("TileMapLayer")
 	
-	connect("body_entered", _on_body_entered)
-	connect("body_exited", _on_body_exited)
 
 
 func _on_body_entered(body: Node2D) -> void:
@@ -29,9 +26,7 @@ func fade_to(alpha: float):
 
 func fade_out():
 	fade_to(normal_alpha)
-	#target.modulate.a = normal_alpha
 
 
 func fade_in():
 	fade_to(shelter_alpha)
-	#target.modulate.a = shelter_alpha

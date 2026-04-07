@@ -8,5 +8,5 @@
 [node name="Floors" type="Node2D" parent="."]
 script = ExtResource("1_a5cvj")
 dungeon_scene = ExtResource("1_dkips")
-total_floors = 1
-master_seed = 12345
+total_floors = 3
+master_seed = 987456
